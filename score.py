@@ -222,10 +222,10 @@ def get_contender_score(team_abbrev, forward_data, defense_data, goalie_data, ev
 # SCRIPT TO CALCULATE NHL TEAM CONTENDER SCORES
 # ====================================================================================================
 
+contender_scores = pd.DataFrame(columns=['Season', 'Team', 'Score'])
+
 # Loop to iterate through the seasons and calculate each NHL team's contender score for that season
 for season in SEASONS:
-
-    contender_scores = pd.DataFrame(columns=['Team', 'Score'])
 
     print(f'Getting {season} data')
 
@@ -250,12 +250,12 @@ for season in SEASONS:
 
         contender_scores = pd.concat([
             contender_scores,
-            pd.DataFrame({'Team': [team_abbrev], 'Score': [team_contender_score]})
+            pd.DataFrame({'Season': [season], 'Team': [team_abbrev], 'Score': [team_contender_score]})
         ], ignore_index=True)
 
 
-    # Save the DataFrame to a CSV file in the scores folder
-    output_path = f'scores/{season}_scores.csv'
+    # Save/update the DataFrame to a CSV file in the scores folder
+    output_path = f'scores/scores.csv'
     contender_scores.to_csv(output_path, index=False)
 
     print(f'Saved scores for {season} to {output_path}')
