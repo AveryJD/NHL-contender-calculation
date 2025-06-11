@@ -88,6 +88,7 @@ def clean_team_data(season: str):
         (df['situation'] == '4on5')
     ]
 
+
     # Save even strength dataframe as a CSV
     save_path = f'cleaned_data/{season}_es.csv'
     es_df.to_csv(save_path, index=False)
