@@ -92,14 +92,16 @@ def get_contender_score(team_abbrev, season, relevant_data):
 # SCRIPT TO CALCULATE CONTENDER SCORES FOR TEAMS OVER MULTIPLE SEASONS 
 # ====================================================================================================
 
-# Initialize contender scores dataframe
-contender_scores = pd.DataFrame(columns=['Season', 'Team', 'Contender Score', 'Result'])
 
 # Load relevant data
 relevant_data = pd.read_csv(f'relevant_data/all_relevant_data.csv')
 
 # Loop to iterate through the seasons and calculate each NHL team's contender score for that season
 for season in constants.SEASONS:
+
+    # Initialize contender scores dataframe
+    contender_scores = pd.DataFrame(columns=['Season', 'Team', 'Contender Score', 'Result']) 
+     
     for team_abbrev in constants.TEAM_ABBREVIATIONS:
 
         # Account for newer teams
@@ -125,7 +127,7 @@ for season in constants.SEASONS:
         contender_scores = pd.concat([contender_scores, new_row], ignore_index=True)
 
 
-# Save contender scores as a CSV file
-contender_scores = contender_scores.sort_values(by="Contender Score", ascending=False).reset_index(drop=True)
-save_path = f'scores/{season}_scores.csv'
-contender_scores.to_csv(save_path, index=False)
+    # Save contender scores as a CSV file
+    contender_scores = contender_scores.sort_values(by="Contender Score", ascending=False).reset_index(drop=True)
+    save_path = f'scores/{season}_scores.csv'
+    contender_scores.to_csv(save_path, index=False)

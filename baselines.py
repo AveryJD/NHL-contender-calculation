@@ -24,22 +24,22 @@ for rounds_won in [1, 2, 3, 4]:
         'Rounds Won': rounds_won,
         'Teams Used': playoff_winners.shape[0],
 
-        'Avg GF Rank': playoff_winners['5v5 GF Rank'].mean(),
-        'Avg GA Rank': playoff_winners['5v5 GA Rank'].mean(),
-        'Avg PP Rank': playoff_winners['PP Rank'].mean(),
-        'Avg PK Rank': playoff_winners['PK Rank'].mean(),
+        'Avg GF Rank': round(playoff_winners['5v5 GF Rank'].mean(), 2),
+        'Avg GA Rank': round(playoff_winners['5v5 GA Rank'].mean(), 2),
+        'Avg PP Rank': round(playoff_winners['PP Rank'].mean(), 2),
+        'Avg PK Rank': round(playoff_winners['PK Rank'].mean(), 2),
 
-        'Avg # Superstar Forwards': playoff_winners['# of Superstar Forwards'].mean(),
-        'Avg # Star Forwards': playoff_winners['# of Star Forwards'].mean(),
-        'Avg Top 6 F Game Score': playoff_winners['Top 6 F Game Score'].mean(),
-        'Avg Bottom 6 F Game Score': playoff_winners['Bottom 6 F Game Score'].mean(),
+        'Avg # Superstar Forwards': round(playoff_winners['# of Superstar Forwards'].mean(), 2),
+        'Avg # Star Forwards': round(playoff_winners['# of Star Forwards'].mean(), 2),
+        'Avg Top 6 F Game Score': round(playoff_winners['Top 6 F Game Score'].mean(), 2),
+        'Avg Bottom 6 F Game Score': round(playoff_winners['Bottom 6 F Game Score'].mean(), 2),
 
-        'Avg # Superstar Defensemen': playoff_winners['# of Superstar Defensemen'].mean(),
-        'Avg # Star Defensemen': playoff_winners['# of Star Defensemen'].mean(),
-        'Avg Top 3 D Game Score': playoff_winners['Top 3 D Game Score'].mean(),
-        'Avg Bottom 3 D Game Score': playoff_winners['Bottom 3 D Game Score'].mean(),
+        'Avg # Superstar Defensemen': round(playoff_winners['# of Superstar Defensemen'].mean(), 2),
+        'Avg # Star Defensemen': round(playoff_winners['# of Star Defensemen'].mean(), 2),
+        'Avg Top 3 D Game Score': round(playoff_winners['Top 3 D Game Score'].mean(), 2),
+        'Avg Bottom 3 D Game Score': round(playoff_winners['Bottom 3 D Game Score'].mean(), 2),
 
-        'Avg Starting Goalie GSAx': playoff_winners['Starting Goalie GSAx'].mean(),
+        'Avg Starting Goalie GSAx': round(playoff_winners['Starting Goalie GSAx'].mean(), 2),
     }
 
     all_averages.append(averages)
