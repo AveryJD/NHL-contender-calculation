@@ -30,7 +30,6 @@ def increase_score(score, value, thresholds, reverse=False):
     return score
 
 
-
 def get_contender_score(team_abbrev, season, relevant_data):
     """
     ADD
@@ -101,10 +100,12 @@ for season in constants.SEASONS:
 
     # Initialize contender scores dataframe
     contender_scores = pd.DataFrame(columns=['Season', 'Team', 'Contender Score', 'Result']) 
-     
+
     for team_abbrev in constants.TEAM_ABBREVIATIONS:
 
-        # Account for newer teams
+        # Account for teams that have not been in the league for every relevant season 
+        if team_abbrev == 'WPG' and season in (constants.ATL_SEASONS):
+            team_abbrev = 'ATL'
         if team_abbrev == 'VGK' and season not in(constants.VGK_SEASONS):
             continue
         if team_abbrev == 'SEA' and season not in(constants.SEA_SEASONS):

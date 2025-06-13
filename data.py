@@ -4,6 +4,35 @@ import pandas as pd
 import constants
 
 
+
+# ====================================================================================================
+# SCRIPT TO FIX INCONSISTENT TEAM ABBREVIATIONS IN RAW DATA FILES
+# ====================================================================================================
+
+for season in constants.SEASONS:
+    for data_set in ['skaters', 'goalies', 'teams']:
+
+
+        # Load the CSV file
+        file_path = f'raw_data/{season}_{data_set}.csv'
+        df = pd.read_csv(file_path)
+
+        # Define replacements
+        replacements = {
+            'L.A': 'LAK',
+            'N.J': 'NJD',
+            'S.J': 'SJS',
+            'T.B': 'TBL'
+        }
+
+        # Replace values across the entire DataFrame
+        df = df.replace(replacements, regex=False)
+
+        # Save to new CSV
+        df.to_csv(file_path, index=False)
+
+
+
 # ====================================================================================================
 # FUNCTION FOR GATHERING RELEVANT DATA
 # ====================================================================================================
@@ -147,7 +176,9 @@ relevant_data = pd.DataFrame(columns=['Season', 'Team', 'Result',
 for season in constants.SEASONS:
     for team_abbrev in constants.TEAM_ABBREVIATIONS:
 
-        # Account for newer teams
+        # Account for teams that have not been in the league for every relevant season 
+        if team_abbrev == 'WPG' and season in (constants.ATL_SEASONS):
+            team_abbrev = 'ATL'
         if team_abbrev == 'VGK' and season not in(constants.VGK_SEASONS):
             continue
         if team_abbrev == 'SEA' and season not in(constants.SEA_SEASONS):
