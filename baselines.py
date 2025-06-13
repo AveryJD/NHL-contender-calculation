@@ -14,14 +14,23 @@ df = pd.read_csv('relevant_data/all_relevant_data.csv')
 all_averages = []
 
 # Loop for calculating averages for different minimum number of playoff round wins
-for rounds_won in [1, 2, 3, 4]:
+loop_count = 0
+for rounds_won in [0, 0, 1, 2, 3, 4]:
 
     # Filter teams
-    playoff_winners = df[df['Result'] >= rounds_won]
+    if loop_count == 0:
+        playoff_winners = df[df['Result'] >= rounds_won]
+        team_data_set = 'All Teams'
+    elif loop_count == 1:
+        playoff_winners = df[df['Result'] == rounds_won]
+        team_data_set = 'Teams that didn\'t win a round'
+    else:
+        playoff_winners = df[df['Result'] >= rounds_won]
+        team_data_set = f'Teams that won at least {rounds_won} round(s)'
 
     # Calculate averages
     averages = {
-        'Rounds Won': rounds_won,
+        'Team Data Set': team_data_set,
         'Teams Used': playoff_winners.shape[0],
 
         'Avg GF Rank': round(playoff_winners['5v5 GF Rank'].mean(), 2),
@@ -43,6 +52,8 @@ for rounds_won in [1, 2, 3, 4]:
     }
 
     all_averages.append(averages)
+
+    loop_count += 1
 
 
 # Convert to DataFrame and save
