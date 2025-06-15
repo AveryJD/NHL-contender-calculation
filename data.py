@@ -4,35 +4,6 @@ import pandas as pd
 import constants
 
 
-
-# ====================================================================================================
-# SCRIPT TO FIX INCONSISTENT TEAM ABBREVIATIONS IN RAW DATA FILES
-# ====================================================================================================
-
-for season in constants.SEASONS:
-    for data_set in ['skaters', 'goalies', 'teams']:
-
-
-        # Load the CSV file
-        file_path = f'raw_data/{season}_{data_set}.csv'
-        df = pd.read_csv(file_path)
-
-        # Define replacements
-        replacements = {
-            'L.A': 'LAK',
-            'N.J': 'NJD',
-            'S.J': 'SJS',
-            'T.B': 'TBL'
-        }
-
-        # Replace values across the entire DataFrame
-        df = df.replace(replacements, regex=False)
-
-        # Save to new CSV
-        df.to_csv(file_path, index=False)
-
-
-
 # ====================================================================================================
 # FUNCTION FOR GATHERING RELEVANT DATA
 # ====================================================================================================
@@ -68,8 +39,8 @@ def get_relevant_data(season: str, team_abbrev: str) -> pd.Series:
     bottom_six_game_score = (bottom_six_forwards['gameScore'] * bottom_six_forwards['games_played']).sum() / bottom_six_forwards['games_played'].sum()
 
     # Get the number of superstar and star forwards
-    super_star_f_count = len(forward_df[forward_df['gameScore'] >= 80])
-    star_f_count = len(forward_df[(forward_df['gameScore'] >= 70) & (forward_df['gameScore'] < 80)])
+    super_star_f_count = (forward_df['isSuperStarF'] == 1).sum()
+    star_f_count = (forward_df['isStarF'] == 1).sum()
 
 
     # Get dataframe of defensemen of the given team
@@ -92,9 +63,8 @@ def get_relevant_data(season: str, team_abbrev: str) -> pd.Series:
     bottom_three_game_score = (bottom_three_defensemen['gameScore'] * bottom_three_defensemen['games_played']).sum() / bottom_three_defensemen['games_played'].sum()
 
     # Get the number of superstar and star defensemen
-    super_star_d_count = len(defense_df[defense_df['gameScore'] >= 70])
-    star_d_count = len(defense_df[(defense_df['gameScore'] >= 50) & (defense_df['gameScore'] < 70)])
-
+    super_star_d_count = (defense_df['isSuperStarD'] == 1).sum()
+    star_d_count = (defense_df['isStarD'] == 1).sum()
 
     # Get dataframe of goalies of the given team
     goalie_df = goalies_df[(goalies_df['team'] == team_abbrev) &
