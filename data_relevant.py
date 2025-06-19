@@ -28,20 +28,18 @@ def get_relevant_data(season: str, team_abbrev: str) -> pd.Series:
     forward_df = forward_df.sort_values(by="games_played", ascending=False).reset_index(drop=True)
     forward_df = forward_df.iloc[:12]
 
-    # Get top 6 and bottom 6 forwards
+    # Get different lines of forwards based on average icetime
     forward_df['icetime/games_played'] = forward_df['icetime'] / forward_df['games_played']
     forward_df = forward_df.sort_values(by="icetime/games_played", ascending=False).reset_index(drop=True)
-    top_six_forwards = forward_df.iloc[:6]
-    bottom_six_forwards = forward_df.iloc[6:12]
 
-    # Get top 6 and bottom 6 average game scores
-    top_six_game_score = (top_six_forwards['gameScore'] * top_six_forwards['games_played']).sum() / top_six_forwards['games_played'].sum()
-    bottom_six_game_score = (bottom_six_forwards['gameScore'] * bottom_six_forwards['games_played']).sum() / bottom_six_forwards['games_played'].sum()
+    top_six_f = forward_df.iloc[:6]
+    bottom_six_f = forward_df.iloc[6:12]
 
-    # Get the number of superstar and star forwards
-    super_star_f_count = (forward_df['isSuperStarF'] == 1).sum()
-    star_f_count = (forward_df['isStarF'] == 1).sum()
+    # Get forward lines total average game scores
+    top_six_f_score = (top_six_f['gameScore'] / top_six_f['games_played']).sum()
+    bottom_six_f_score = (bottom_six_f['gameScore'] / bottom_six_f['games_played']).sum()
 
+    
 
     # Get dataframe of defensemen of the given team
     defense_df = skaters_df[(skaters_df['team'] == team_abbrev) & 
@@ -52,19 +50,15 @@ def get_relevant_data(season: str, team_abbrev: str) -> pd.Series:
     defense_df = defense_df.sort_values(by="games_played", ascending=False).reset_index(drop=True)
     defense_df = defense_df.iloc[:6]
 
-    # Get top 3 and bottom 3 defensemen
     defense_df['icetime/games_played'] = defense_df['icetime'] / defense_df['games_played']
     defense_df = defense_df.sort_values(by="icetime/games_played", ascending=False).reset_index(drop=True)
-    top_three_defensemen = defense_df.iloc[:3]
-    bottom_three_defensemen = defense_df.iloc[3:6]
 
-    # Get top 6 and bottom 6 average game scores
-    top_three_game_score = (top_three_defensemen['gameScore'] * top_three_defensemen['games_played']).sum() / top_three_defensemen['games_played'].sum()
-    bottom_three_game_score = (bottom_three_defensemen['gameScore'] * bottom_three_defensemen['games_played']).sum() / bottom_three_defensemen['games_played'].sum()
+    top_three_d = defense_df.iloc[:3]
+    bottom_three_d = defense_df.iloc[3:6]
 
-    # Get the number of superstar and star defensemen
-    super_star_d_count = (defense_df['isSuperStarD'] == 1).sum()
-    star_d_count = (defense_df['isStarD'] == 1).sum()
+    top_three_d_score = (top_three_d['gameScore'] / top_three_d['games_played']).sum()
+    bottom_three_d_score = (bottom_three_d['gameScore'] / bottom_three_d['games_played']).sum()
+
 
     # Get dataframe of goalies of the given team
     goalie_df = goalies_df[(goalies_df['team'] == team_abbrev) &
@@ -78,54 +72,58 @@ def get_relevant_data(season: str, team_abbrev: str) -> pd.Series:
     starting_goalie_gsax = starting_goalie['xGoals'] - starting_goalie['goals']
 
 
-    # Get dataframe of team even strength data
-    es_df = teams_df[(teams_df['situation'] == '5on5')]
+    # Get the team's even strength data
+    es_df = teams_df[(teams_df['team'] == team_abbrev) & (teams_df['situation'] == '5on5')]
 
-    # Get the given team's goals for ranking
-    team_gf_rank = es_df.sort_values(by="goalsFor", ascending=False).reset_index(drop=True)
-    team_gf_rank = team_gf_rank.index[team_gf_rank['team'] == team_abbrev][0] + 1
+    # Get the team's even strength goals for and against
+    team_gf = es_df.iloc[0]['goalsFor']
+    team_ga = es_df.iloc[0]['goalsAgainst']
 
-    # Get the given team's goals against ranking
-    team_ga_rank = es_df.sort_values(by="goalsAgainst", ascending=True).reset_index(drop=True)
-    team_ga_rank = team_ga_rank.index[team_ga_rank['team'] == team_abbrev][0] + 1
+    # Get the team's special teams data
+    pp_df = teams_df[(teams_df['team'] == team_abbrev) & (teams_df['situation'] == '5on4')]
+    pk_df = teams_df[(teams_df['team'] == team_abbrev) & (teams_df['situation'] == '4on5')]
 
-    # Get dataframe of team power play data
-    pp_df = teams_df[(teams_df['situation'] == '5on4')]
+    # Get the team's even strength goals for and against
+    team_pp_gf = pp_df.iloc[0]['goalsFor']
+    team_pk_ga = pk_df.iloc[0]['goalsAgainst']
 
-    # Get the given team's power play ranking
-    team_pp_rank = pp_df.sort_values(by="goalsFor", ascending=False).reset_index(drop=True)
-    team_pp_rank = team_pp_rank.index[team_pp_rank['team'] == team_abbrev][0] + 1
+    # Adjust goals for seasons that wern't played with 82 games
+    if season == '2012-2013':
+        season_games = 48
+    elif season == '2019-2020':
+        season_games = 70
+    elif season == '2020-2021':
+        season_games = 56
+    else:
+        season_games = 82
 
-    # Get dataframe of team penalty kill data
-    pk_df = teams_df[(teams_df['situation'] == '4on5')]
+    adjustment = 82 / season_games
 
-    # Get the given team's penalty kill ranking
-    team_pk_rank = pk_df.sort_values(by="goalsAgainst", ascending=True).reset_index(drop=True)
-    team_pk_rank = team_pk_rank.index[team_pk_rank['team'] == team_abbrev][0] + 1
+    team_gf *= adjustment
+    team_ga *= adjustment
+    team_pp_gf *= adjustment
+    team_pk_ga *= adjustment
+
 
     # Get the given team's playoff results
     result = constants.TEAM_RESULTS.get(season, {}).get(team_abbrev, 0)
 
 
-    # Final series containing the relevant data
     data_row = pd.Series({
         'Season': season,
         'Team': team_abbrev,
         'Result': result,
-        '5v5 GF Rank': team_gf_rank,
-        '5v5 GA Rank': team_ga_rank,
-        'PP Rank': team_pp_rank,
-        'PK Rank': team_pk_rank,
-        '# of Superstar Forwards': super_star_f_count,
-        '# of Star Forwards': star_f_count,
-        'Top 6 F Game Score': top_six_game_score,
-        'Bottom 6 F Game Score': bottom_six_game_score,
-        '# of Superstar Defensemen': super_star_d_count,
-        '# of Star Defensemen': star_d_count,
-        'Top 3 D Game Score': top_three_game_score,
-        'Bottom 3 D Game Score': bottom_three_game_score,
-        'Starting Goalie GSAx': starting_goalie_gsax
+        'Top 6 F Game Score': top_six_f_score,
+        'Bottom 6 F Game Score': bottom_six_f_score,
+        'Top 3 D Game Score': top_three_d_score,
+        'Bottom 3 D Game Score': bottom_three_d_score,
+        'Starting Goalie GSAx': starting_goalie_gsax,
+        'ES GF': team_gf,
+        'ES GA': team_ga,
+        'PP GF': team_pp_gf,
+        'PK GA': team_pk_ga
     })
+
 
     return data_row
 
@@ -136,11 +134,12 @@ def get_relevant_data(season: str, team_abbrev: str) -> pd.Series:
 # ====================================================================================================
 
 # Initialize relevant data dataframe
-relevant_data = pd.DataFrame(columns=['Season', 'Team', 'Result', 
-                                         '5v5 GF Rank', '5v5 GA Rank', 'PP Rank', 'PK Rank', 
-                                         '# of Superstar Forwards', '# of Star Forwards', 'Top 6 F Game Score', 'Bottom 6 F Game Score',
-                                         '# of Superstar Defensemen', '# of Star Defensemen', 'Top 3 D Game Score', 'Bottom 3 D Game Score',
-                                         'Starting Goalie GSAx'])
+relevant_data = pd.DataFrame(columns=['Season', 'Team', 'Result',
+                                      'Top 6 F Game Score', 'Bottom 6 F Game Score',
+                                      'Top 3 D Game Score', 'Bottom 3 D Game Score',
+                                      'Starting Goalie GSAx',
+                                      'ES GF', 'ES GA', 'PP GF', 'PK GA'])
+
 
 # Loop to iterate through the seasons and collect the relevant data for each team
 for season in constants.SEASONS:
