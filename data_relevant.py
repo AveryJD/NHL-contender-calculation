@@ -14,9 +14,9 @@ def get_relevant_data(season: str, team_abbrev: str) -> pd.Series:
     """
 
     # Load data
-    skaters_df = pd.read_csv(f'raw_data/{season}_skaters.csv')
-    goalies_df = pd.read_csv(f'raw_data/{season}_goalies.csv')
-    teams_df = pd.read_csv(f'raw_data/{season}_teams.csv')
+    skaters_df = pd.read_csv(f'data_raw/{season}_skaters.csv')
+    goalies_df = pd.read_csv(f'data_raw/{season}_goalies.csv')
+    teams_df = pd.read_csv(f'data_raw/{season}_teams.csv')
 
 
     # Get dataframe of forwards of the given team
@@ -106,7 +106,7 @@ def get_relevant_data(season: str, team_abbrev: str) -> pd.Series:
 
 
     # Get the given team's playoff results
-    result = constants.TEAM_RESULTS.get(season, {}).get(team_abbrev, 0)
+    result = constants.TEAM_RESULTS.get(season, {}).get(team_abbrev, -1)
 
 
     data_row = pd.Series({
@@ -160,5 +160,5 @@ for season in constants.SEASONS:
         relevant_data = pd.concat([relevant_data, data_row.to_frame().T], ignore_index=True)
 
 # Save relevant data as a CSV file
-save_path = f'relevant_data/all_relevant_data.csv'
+save_path = f'data_relevant/all_relevant_data.csv'
 relevant_data.to_csv(save_path, index=False)

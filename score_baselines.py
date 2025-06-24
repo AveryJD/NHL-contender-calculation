@@ -8,7 +8,7 @@ import pandas as pd
 # ====================================================================================================
 
 # Load the relevant data
-df = pd.read_csv('relevant_data/all_relevant_data.csv')
+df = pd.read_csv('data_relevant/all_relevant_data.csv')
 
 # Initialize list to store all averages
 baseline_data = []
@@ -67,4 +67,4 @@ for rounds_won in [0, 0, 1, 1, 2, 2, 3, 3, 4]:
 
 # Convert to DataFrame and save
 AVG_df = pd.DataFrame(baseline_data)
-AVG_df.to_csv('relevant_data/baseline_data.csv', index=False)
+AVG_df.to_csv('data_relevant/baseline_data.csv', index=False)
