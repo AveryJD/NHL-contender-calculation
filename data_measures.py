@@ -35,24 +35,25 @@ for rounds_won in [0, 0, 1, 1, 2, 2, 3, 3, 4]:
         'Team Data Set': team_data_set_str,
         'Teams Used': team_data_set.shape[0],
 
-        'AVG T3F Game Score': round(team_data_set['Top 3 F Game Score'].mean(), 2),
-        'AVG TM3F Game Score': round(team_data_set['Top Middle 3 F Game Score'].mean(), 2),
-        'AVG BM3F Game Score': round(team_data_set['Bottom Middle 3 F Game Score'].mean(), 2),
-        'AVG B6F Game Score': round(team_data_set['Bottom 3 F Game Score'].mean(), 2),
-        'AVG T2D Game Score': round(team_data_set['Top 2 D Game Score'].mean(), 2),
-        'AVG M2D Game Score': round(team_data_set['Middle 2 D Game Score'].mean(), 2),
-        'AVG B2D Game Score': round(team_data_set['Bottom 2 D Game Score'].mean(), 2),
-        'AVG Starting Goalie GSAx/GP': round(team_data_set['Starting Goalie GSAx/GP'].mean(), 2),
+        'MEAN 1-3 F Avg Game Score': round(team_data_set['1-3 F Avg Game Score'].mean(), 2),
+        'MEAN 4-6 F Avg Game Score': round(team_data_set['4-6 F Avg Game Score'].mean(), 2),
+        'MEAN 7-9 F Avg Game Score': round(team_data_set['7-9 F Avg Game Score'].mean(), 2),
+        'MEAN 9-12 F Avg Game Score': round(team_data_set['9-12 F Avg Game Score'].mean(), 2),
+        'MEAN 1-2 D Avg Game Score': round(team_data_set['1-2 D Avg Game Score'].mean(), 2),
+        'MEAN 3-4 D Avg Game Score': round(team_data_set['3-4 D Avg Game Score'].mean(), 2),
+        'MEAN 5-6 D Avg Game Score': round(team_data_set['5-6 D Avg Game Score'].mean(), 2),
+        'MEAN Starting Goalie Avg GSAx': round(team_data_set['Starting Goalie Avg GSAx'].mean(), 2),
 
-        'STD T3F Game Score': round(team_data_set['Top 3 F Game Score'].std(), 2),
-        'STD TM3F Game Score': round(team_data_set['Top Middle 3 F Game Score'].std(), 2),
-        'STD BM3F Game Score': round(team_data_set['Bottom Middle 3 F Game Score'].std(), 2),
-        'STD B6F Game Score': round(team_data_set['Bottom 3 F Game Score'].std(), 2),
-        'STD T2D Game Score': round(team_data_set['Top 2 D Game Score'].std(), 2),
-        'STD M2D Game Score': round(team_data_set['Middle 2 D Game Score'].std(), 2),
-        'STD B2D Game Score': round(team_data_set['Bottom 2 D Game Score'].std(), 2),
-        'STD Starting Goalie GSAx/GP': round(team_data_set['Starting Goalie GSAx/GP'].std(), 2),
+        'STD 1-3 F Avg Game Score': round(team_data_set['1-3 F Avg Game Score'].std(), 2),
+        'STD 4-6 F Avg Game Score': round(team_data_set['4-6 F Avg Game Score'].std(), 2),
+        'STD 7-9 F Avg Game Score': round(team_data_set['7-9 F Avg Game Score'].std(), 2),
+        'STD 9-12 F Avg Game Score': round(team_data_set['9-12 F Avg Game Score'].std(), 2),
+        'STD 1-2 D Avg Game Score': round(team_data_set['1-2 D Avg Game Score'].std(), 2),
+        'STD 3-4 D Avg Game Score': round(team_data_set['3-4 D Avg Game Score'].std(), 2),
+        'STD 5-6 D Avg Game Score': round(team_data_set['5-6 D Avg Game Score'].std(), 2),
+        'STD Starting Goalie Avg GSAx': round(team_data_set['Starting Goalie Avg GSAx'].std(), 2),
     }
+
 
     measures_data.append(averages)
 
@@ -61,4 +62,4 @@ for rounds_won in [0, 0, 1, 1, 2, 2, 3, 3, 4]:
 
 # Save CSV file
 AVG_df = pd.DataFrame(measures_data)
-AVG_df.to_csv('data_relevant/measures_data.csv', index=False)
+AVG_df.to_csv('relevant_data/measures_data.csv', index=False)

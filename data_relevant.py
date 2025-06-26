@@ -33,10 +33,10 @@ def get_scoring_data(season: str, team_abbrev: str) -> pd.Series:
     ten_twelve_f = forward_df.iloc[9:12]
 
     # Get the total average game scores of the forward lines
-    one_three_f_score = (one_three_f['gameScore'] / one_three_f['games_played']).sum()
-    four_six_f_score = (four_six_f['gameScore'] / four_six_f['games_played']).sum()
-    seven_nine_f_score = (seven_nine_f['gameScore'] / seven_nine_f['games_played']).sum()
-    ten_twelve_f_score = (ten_twelve_f['gameScore'] / ten_twelve_f['games_played']).sum()
+    one_three_f_score = (one_three_f['gameScore'] / one_three_f['games_played']).mean()
+    four_six_f_score = (four_six_f['gameScore'] / four_six_f['games_played']).mean()
+    seven_nine_f_score = (seven_nine_f['gameScore'] / seven_nine_f['games_played']).mean()
+    ten_twelve_f_score = (ten_twelve_f['gameScore'] / ten_twelve_f['games_played']).mean()
 
     
     # Get dataframe of defensemen of the given team
@@ -57,9 +57,9 @@ def get_scoring_data(season: str, team_abbrev: str) -> pd.Series:
     five_six_d = defense_df.iloc[4:6]
 
     # Get the total average game scores of the defense lines
-    one_two_d_score = (one_two_d['gameScore'] / one_two_d['games_played']).sum()
-    three_four_d_score = (three_four_d['gameScore'] / three_four_d['games_played']).sum()
-    five_six_d_score = (five_six_d['gameScore'] / five_six_d['games_played']).sum()
+    one_two_d_score = (one_two_d['gameScore'] / one_two_d['games_played']).mean()
+    three_four_d_score = (three_four_d['gameScore'] / three_four_d['games_played']).mean()
+    five_six_d_score = (five_six_d['gameScore'] / five_six_d['games_played']).mean()
 
 
     # Get dataframe of goalies of the given team
@@ -83,14 +83,14 @@ def get_scoring_data(season: str, team_abbrev: str) -> pd.Series:
         'Season': season,
         'Team': team_abbrev,
         'Result': result,
-        '1-3 F Avg Game Scores': one_three_f_score,
+        '1-3 F Avg Game Score': one_three_f_score,
         '4-6 F Avg Game Score': four_six_f_score,
         '7-9 F Avg Game Score': seven_nine_f_score,
         '9-12 F Avg Game Score': ten_twelve_f_score,
         '1-2 D Avg Game Score': one_two_d_score,
         '3-4 D Avg Game Score': three_four_d_score,
         '5-6 D Avg Game Score': five_six_d_score,
-        'Starting Goalie GSAx/GP': starting_goalie_gsax,
+        'Starting Goalie Avg GSAx': starting_goalie_gsax,
     })
 
     return data_row
@@ -106,14 +106,14 @@ scoring_data = pd.DataFrame(columns=[
     'Season', 
     'Team', 
     'Result',
-    '1-3 F Avg Game Scores', 
+    '1-3 F Avg Game Score', 
     '4-6 F Avg Game Score', 
     '7-9 F Avg Game Score', 
     '9-12 F Avg Game Score',
     '1-2 D Avg Game Score', 
     '3-4 D Avg Game Score', 
     '5-6 D Avg Game Score', 
-    'Starting Goalie GSAx/GP'
+    'Starting Goalie Avg GSAx'
 ])
 
 # Loop to iterate through the seasons and collect the relevant data for each team

@@ -34,14 +34,14 @@ def get_contender_score(team_abbrev: str, season: str, scoring_data: pd.DataFram
         (scoring_data['Season'] == season)].iloc[0]
     
     # Get the average game scores for each forward and defense group as well as the goalie's GSAx/GP
-    top_f_score = team_data['1-3 F Avg Game Scores']
+    top_f_score = team_data['1-3 F Avg Game Score']
     top_mid_f_score = team_data['4-6 F Avg Game Score']
     bot_mid_f_score = team_data['7-9 F Avg Game Score']
     bot_f_score = team_data['9-12 F Avg Game Score']
     top_d_score = team_data['1-2 D Avg Game Score']
     mid_d_score = team_data['3-4 D Avg Game Score']
     bot_d_score = team_data['5-6 D Avg Game Score']
-    goalie_gsax  = team_data['Starting Goalie GSAx/GP']
+    goalie_gsax  = team_data['Starting Goalie Avg GSAx']
 
     # Initialize the contender score
     score = 0
