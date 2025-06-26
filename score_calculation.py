@@ -1,92 +1,85 @@
-# score_calculation.py
 
+# Imports
 import pandas as pd
 import constants
 
-SET_WEIGHTS = {
-    'top_f':        8,
-    'bottom_f':     3,
-    'top_d':        5,
-    'bottom_d':     5,
-    'goalie_gsax':  3,
-    'goals_for':    1,
-    'goals_against':1,
-    'power_play':   1,
-    'penalty_kill': 1,
-}
 
+# ====================================================================================================
+# FUNCTIONS FOR CALCULATING A TEAMS CONTENDER SCORE
+# ====================================================================================================
 
-def increase_score(score: float, value: float, type: str, weights=SET_WEIGHTS, z_stats=constants.Z_STATS) -> float:
-    factor = weights.get(type)
+def increase_score(score: float, value: float, type: str) -> float:
+    
+    # Get z stats and factor weights
+    z_stats = constants.Z_STATS
+    weights = constants.SCORE_WEIGHTS
 
+    # Get the mean, standard deviation, and factor weight of the metric to be scored
     mean = z_stats[type]['mean']
     std = z_stats[type]['std']
+    factor = weights[type]
 
-    # Flip direction for metrics where lower is better
-    if type in ['goals_against', 'penalty_kill']:
-        z = (mean - value) / std
-    else:
-        z = (value - mean) / std
+    # Calculate the factored z score of the value
+    z_score = (value - mean) / std
+    score += z_score * factor
 
-    score += z * factor
     return score
 
 
-def get_contender_score(team_abbrev, season, relevant_data, season_data, weights=SET_WEIGHTS):
+def get_contender_score(team_abbrev: str, season: str, scoring_data: pd.DataFrame) -> float:
 
-    team_data = relevant_data[
-        (relevant_data['Team'] == team_abbrev) &
-        (relevant_data['Season'] == season)
-    ].iloc[0]
+    # Get the given team's scoring data for the given year
+    team_data = scoring_data[
+        (scoring_data['Team'] == team_abbrev) &
+        (scoring_data['Season'] == season)].iloc[0]
+    
+    # Get the average game scores for each forward and defense group as well as the goalie's GSAx/GP
+    top_f_score = team_data['1-3 F Avg Game Scores']
+    top_mid_f_score = team_data['4-6 F Avg Game Score']
+    bot_mid_f_score = team_data['7-9 F Avg Game Score']
+    bot_f_score = team_data['9-12 F Avg Game Score']
+    top_d_score = team_data['1-2 D Avg Game Score']
+    mid_d_score = team_data['3-4 D Avg Game Score']
+    bot_d_score = team_data['5-6 D Avg Game Score']
+    goalie_gsax  = team_data['Starting Goalie GSAx/GP']
 
-    season_data = season_data[season_data['Team'] == team_abbrev].iloc[0]
-
-    top_f_score = team_data['Top 6 F Game Score']
-    bottom_f_score = team_data['Bottom 6 F Game Score']
-    top_d_score = team_data['Top 3 D Game Score']
-    bottom_d_score = team_data['Bottom 3 D Game Score']
-    starting_goalie_gsax = team_data['Starting Goalie GSAx']
-
-    team_gf_rank = team_data['ES GF']
-    team_ga_rank = team_data['ES GA']
-    team_pp_rank = team_data['PP GF']
-    team_pk_rank = team_data['PK GA']
-
-    standings_rank = season_data['Rk']
-
-    result = team_data['Result']
-
+    # Initialize the contender score
     score = 0
 
-    score = increase_score(score, top_f_score, 'top_f', weights)
-    score = increase_score(score, bottom_f_score, 'bottom_f', weights)
-    score = increase_score(score, top_d_score, 'top_d', weights)
-    score = increase_score(score, bottom_d_score, 'bottom_d', weights)
-    score = increase_score(score, starting_goalie_gsax, 'goalie_gsax', weights)
-    
-    score = increase_score(score, team_gf_rank, 'goals_for', weights)
-    score = increase_score(score, team_ga_rank, 'goals_against', weights)
-    score = increase_score(score, team_pp_rank, 'power_play', weights)
-    score = increase_score(score, team_pk_rank, 'penalty_kill', weights)
+    # Apply z-score normalization and weightings for each group and accumulate the total contender score
+    score = increase_score(score, top_f_score, 'one_three_f')
+    score = increase_score(score, top_mid_f_score, 'four_six_f')
+    score = increase_score(score, bot_mid_f_score, 'seven_nine_f')
+    score = increase_score(score, bot_f_score, 'ten_twelve_f')
+    score = increase_score(score, top_d_score, 'one_two_d')
+    score = increase_score(score, mid_d_score, 'three_four_d')
+    score = increase_score(score, bot_d_score, 'five_six_d')
+    score = increase_score(score, goalie_gsax, 'goalie_gsax')
 
     score = round(score, 2)
 
-    return score, result, standings_rank
+    # Get the team's playoff result
+    result = team_data['Result']
+
+    return score, result
 
 
 
 # ====================================================================================================
-# SCORE CALCULATION LOOP FOR ALL SEASONS
+# SCRIPT TO CALCULATION CONTENDER SCORES FOR ALL TEAMS IN ALL SEASONS
 # ====================================================================================================
 
-relevant_data = pd.read_csv('data_relevant/all_relevant_data.csv')
+# Load scoring data
+scoring_data = pd.read_csv('relevant_data/scoring_data.csv')
 
 for season in constants.SEASONS:
     rows = []
 
-    standings_data = pd.read_csv(f'data_standings/{season}.csv')
+    # Load the standings data for the year
+    standings_data = pd.read_csv(f'raw_data/standings_data/{season}.csv')
 
     for team_abbrev in constants.TEAM_ABBREVIATIONS:
+        # Account for league team changes across seasons
         if team_abbrev == 'WPG' and season in constants.ATL_SEASONS:
             team_abbrev = 'ATL'
         if team_abbrev == 'VGK' and season not in constants.VGK_SEASONS:
@@ -96,8 +89,14 @@ for season in constants.SEASONS:
         if team_abbrev == 'UTA' and season not in constants.UTA_SEASONS:
             team_abbrev = 'ARI'
 
-        contender_score, result, standings_rank = get_contender_score(team_abbrev, season, relevant_data, standings_data, SET_WEIGHTS)
+        # Get the contender score, playoff result, and standing rank for the team
+        contender_score, result = get_contender_score(team_abbrev, season, scoring_data)
 
+        # Get the team's standing ranking
+        team_standings_data = standings_data[standings_data['Team'] == team_abbrev].iloc[0]
+        standings_rank = team_standings_data['Rk']
+
+        # Add the team's contender score and information if they made the playoffs
         if result != -1:
             rows.append({
                 'Season': season,
@@ -107,7 +106,7 @@ for season in constants.SEASONS:
                 'Result': result
             })
 
+    # Save the CSV file
     df = pd.DataFrame(rows)
     df = df.sort_values(by="Contender Score", ascending=False).reset_index(drop=True)
-
     df.to_csv(f'scores/{season}_scores.csv', index=False)

@@ -108,6 +108,18 @@ Z_STATS = {
     }
 }
 
+# Factor weights for increasing contender scores
+SCORE_WEIGHTS = {
+    'one_three_f':  10.5,
+    'four_six_f':   2.5,
+    'seven_nine_f': 0,
+    'ten_twelve_f': 0.5,
+    'one_two_d':    5.5,
+    'three_four_d': 0,
+    'five_six_d':   15,
+    'goalie_gsax':  16,
+}
+
 
 # Playoff results (rounds won) by season and team
 TEAM_RESULTS = {
