@@ -1,7 +1,9 @@
+
 # ====================================================================================================
-# CONSTANTS USED THROUOUGHT CODE
+# CONSTANTS USED THROUGHOUT CODE
 # ====================================================================================================
 
+# List of seasons included in the analysis
 SEASONS = [
     '2024-2025', '2023-2024', '2022-2023', '2021-2022', '2020-2021',
     '2019-2020', '2018-2019', '2017-2018', '2016-2017', '2015-2016',
@@ -10,12 +12,14 @@ SEASONS = [
 ]
 
 
+# List of all NHL team abbreviations currently tracked in the dataset
 TEAM_ABBREVIATIONS = [
     'ANA', 'BOS', 'BUF', 'CGY', 'CAR', 'CHI', 'COL', 'CBJ', 'DAL', 'DET', 'EDM',
     'FLA', 'LAK', 'MIN', 'MTL', 'NSH', 'NJD', 'NYI', 'NYR', 'OTT', 'PHI', 'PIT', 
     'SJS', 'SEA', 'STL', 'TBL', 'TOR', 'VAN', 'UTA', 'VGK', 'WSH', 'WPG'
 ]
 
+# Mapping of full team names to their abbreviations
 TEAM_NAME_MAP = {
     'Anaheim Ducks': 'ANA',
     'Boston Bruins': 'BOS',
@@ -55,62 +59,63 @@ TEAM_NAME_MAP = {
 }
 
 
+# Seasons the Atlanta Thrashers played in the league
 ATL_SEASONS = ['2010-2011', '2009-2010', '2008-2009']
 
+# Seasons the Vegas Golden Knights played in the league
 VGK_SEASONS = ['2024-2025', '2023-2024', '2022-2023', '2021-2022', '2020-2021', '2019-2020', '2018-2019', '2017-2018']
 
+# Seasons the Seattle Kraken played in the league
 SEA_SEASONS = ['2024-2025', '2023-2024', '2022-2023', '2021-2022']
 
+# Seasons the Utah Hockey Club played in the league
 UTA_SEASONS = ['2024-2025']
 
+
+# Z-score constants (mean and standard deviations for player games scores/ goalie GSAx)
 Z_STATS = {
-    'top_f': {
-        'mean': 4.96,
-        'std': 0.84
+    'one_three_f': {
+        'mean': 2.82,
+        'std': 0.59
     },
-    'bottom_f': {
-        'mean': 2.26,
-        'std': 0.60
+    'four_six_f': {
+        'mean': 1.99,
+        'std': 0.43
     },
-    'top_d': {
-        'mean': 1.79,
-        'std': 0.47
+    'seven_nine_f': {
+        'mean': 1.36,
+        'std': 0.43
     },
-    'bottom_d': {
-        'mean': 0.99,
+    'ten_twelve_f': {
+        'mean': 0.82,
         'std': 0.36
     },
+    'one_two_d': {
+        'mean': 1.26,
+        'std': 0.36
+    },
+    'three_four_d': {
+        'mean': 0.81,
+        'std': 0.29
+    },
+    'five_six_d': {
+        'mean': 0.59,
+        'std': 0.26
+    },
     'goalie_gsax': {
-        'mean': 8.51,
-        'std': 12.64
-    },
-    'goals_for': {
-        'mean': 165.35,
-        'std': 19.36
-    },
-    'goals_against': {
-        'mean': 141.28,
-        'std': 16.08
-    },
-    'power_play': {
-        'mean': 49.25,
-        'std': 10.57
-    },
-    'penalty_kill': {
-        'mean': 40.99,
-        'std': 7.91
+        'mean': 0.13,
+        'std': 0.23
     }
 }
 
 
-
-
+# Playoff results (rounds won) by season and team
 TEAM_RESULTS = {
     '2024-2025': {
         'FLA': 4, 'EDM': 3, 'DAL': 2, 'CAR': 2,
         'WPG': 1, 'VGK': 1, 'TOR': 1, 'WSH': 1,
-        'LAK': 0, 'MIN': 0, 'DAL': 0, 'STL': 0,
-        'NJD': 0, 'MTL': 0, 'TBL': 0, 'OTT': 0
+        'LAK': 0, 'MIN': 0, 'STL': 0, 'COL': 0,
+        'MTL': 0, 'TBL': 0, 'OTT': 0, 'NJD': 0
     },
     '2023-2024': {
         'FLA': 4, 'EDM': 3, 'DAL': 2, 'NYR': 2,
