@@ -72,52 +72,52 @@ SEA_SEASONS = ['2024-2025', '2023-2024', '2022-2023', '2021-2022']
 UTA_SEASONS = ['2024-2025']
 
 
-# Z-score constants (mean and standard deviations for player games scores/ goalie GSAx)
+# Z-score constants (mean and standard deviations for player average games scores/ goalie GSAx)
 Z_STATS = {
     'one_three_f': {
-        'mean': 2.82,
-        'std': 0.59
+        'mean': 0.940,
+        'std': 0.197
     },
     'four_six_f': {
-        'mean': 1.99,
-        'std': 0.43
+        'mean': 0.661,
+        'std': 0.141
     },
     'seven_nine_f': {
-        'mean': 1.36,
-        'std': 0.43
+        'mean': 0.456,
+        'std': 0.121
     },
     'ten_twelve_f': {
-        'mean': 0.82,
-        'std': 0.36
+        'mean': 0.274,
+        'std': 0.110
     },
     'one_two_d': {
-        'mean': 1.26,
-        'std': 0.36
+        'mean': 0.631,
+        'std': 0.181
     },
     'three_four_d': {
-        'mean': 0.81,
-        'std': 0.29
+        'mean': 0.403,
+        'std': 0.146
     },
     'five_six_d': {
-        'mean': 0.59,
-        'std': 0.26
+        'mean': 0.293,
+        'std': 0.129
     },
     'goalie_gsax': {
-        'mean': 0.13,
-        'std': 0.23
+        'mean': 0.131,
+        'std': 0.235
     }
 }
 
 # Factor weights for increasing contender scores
 SCORE_WEIGHTS = {
-    'one_three_f':  10.5,
-    'four_six_f':   2.5,
-    'seven_nine_f': 0,
-    'ten_twelve_f': 0.5,
-    'one_two_d':    5.5,
-    'three_four_d': 0,
-    'five_six_d':   15,
-    'goalie_gsax':  16,
+    'one_three_f': 4.65,
+    'four_six_f': 0.05,
+    'seven_nine_f': 0.00,
+    'ten_twelve_f': 4.50,
+    'one_two_d': 8.80,
+    'three_four_d': 2.00,
+    'five_six_d': 9.15,
+    'goalie_gsax': 9.75,
 }
 
 
@@ -132,13 +132,13 @@ TEAM_RESULTS = {
     '2023-2024': {
         'FLA': 4, 'EDM': 3, 'DAL': 2, 'NYR': 2,
         'COL': 1, 'VAN': 1, 'BOS': 1, 'CAR': 1,
-        'LAK': 0, 'VGK': 0, 'NSH': 0, 'WIN': 0,
+        'LAK': 0, 'VGK': 0, 'NSH': 0, 'WPG': 0,
         'TOR': 0, 'NYI': 0, 'WSH': 0, 'TBL': 0
     },
     '2022-2023': {
         'VGK': 4, 'FLA': 3, 'DAL': 2, 'CAR': 2,
         'SEA': 1, 'EDM': 1, 'TOR': 1, 'NJD': 1,
-        'LAK': 0, 'WIN': 0, 'MIN': 0, 'COL': 0,
+        'LAK': 0, 'WPG': 0, 'MIN': 0, 'COL': 0,
         'NYR': 0, 'NYI': 0, 'TBL': 0, 'BOS': 0
     },
     '2021-2022': {
@@ -162,7 +162,7 @@ TEAM_RESULTS = {
     '2018-2019': {
         'STL': 4, 'BOS': 3, 'SJS': 2, 'CAR': 2,
         'COL': 1, 'DAL': 1, 'CBJ': 1, 'NYI': 1,
-        'VGK': 0, 'WIN': 0, 'CGY': 0, 'NSH': 0,
+        'VGK': 0, 'WPG': 0, 'CGY': 0, 'NSH': 0,
         'PIT': 0, 'TOR': 0, 'WSH': 0, 'TBL': 0
     },
     '2017-2018': {
@@ -186,7 +186,7 @@ TEAM_RESULTS = {
     '2014-2015': {
         'CHI': 4, 'TBL': 3, 'ANA': 2, 'NYR': 2,
         'MIN': 1, 'CGY': 1, 'MTL': 1, 'WSH': 1,
-        'VAN': 0, 'WIN': 0, 'NSH': 0, 'STL': 0,
+        'VAN': 0, 'WPG': 0, 'NSH': 0, 'STL': 0,
         'NYI': 0, 'PIT': 0, 'DET': 0, 'OTT': 0
     },
     '2013-2014': {
