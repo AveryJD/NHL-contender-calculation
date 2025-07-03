@@ -8,11 +8,10 @@ import constants
 # FUNCTIONS FOR CALCULATING A TEAMS CONTENDER SCORE
 # ====================================================================================================
 
-def increase_score(score: float, value: float, type: str) -> float:
+def increase_score(score: float, value: float, type: str, weights) -> float:
     
-    # Get z stats and factor weights
+    # Get z stats
     z_stats = constants.Z_STATS
-    weights = constants.SCORE_WEIGHTS
 
     # Get the mean, standard deviation, and factor weight of the metric to be scored
     mean = z_stats[type]['mean']
@@ -26,7 +25,7 @@ def increase_score(score: float, value: float, type: str) -> float:
     return score
 
 
-def get_contender_score(team_abbrev: str, season: str, scoring_data: pd.DataFrame) -> float:
+def get_contender_score(team_abbrev: str, season: str, scoring_data: pd.DataFrame, weights=constants.SCORE_WEIGHTS) -> float:
 
     # Get the given team's scoring data for the given year
     team_data = scoring_data[
@@ -47,14 +46,14 @@ def get_contender_score(team_abbrev: str, season: str, scoring_data: pd.DataFram
     score = 0
 
     # Apply z-score normalization and weightings for each group and accumulate the total contender score
-    score = increase_score(score, top_f_score, 'one_three_f')
-    score = increase_score(score, top_mid_f_score, 'four_six_f')
-    score = increase_score(score, bot_mid_f_score, 'seven_nine_f')
-    score = increase_score(score, bot_f_score, 'ten_twelve_f')
-    score = increase_score(score, top_d_score, 'one_two_d')
-    score = increase_score(score, mid_d_score, 'three_four_d')
-    score = increase_score(score, bot_d_score, 'five_six_d')
-    score = increase_score(score, goalie_gsax, 'goalie_gsax')
+    score = increase_score(score, top_f_score, 'one_three_f', weights)
+    score = increase_score(score, top_mid_f_score, 'four_six_f', weights)
+    score = increase_score(score, bot_mid_f_score, 'seven_nine_f', weights)
+    score = increase_score(score, bot_f_score, 'ten_twelve_f', weights)
+    score = increase_score(score, top_d_score, 'one_two_d', weights)
+    score = increase_score(score, mid_d_score, 'three_four_d', weights)
+    score = increase_score(score, bot_d_score, 'five_six_d', weights)
+    score = increase_score(score, goalie_gsax, 'goalie_gsax', weights)
 
     score = round(score, 2)
 
