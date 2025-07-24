@@ -1,4 +1,4 @@
-# NHL-assist-value-compared-to-goals
+# Code for "Determining Stanley Cup Contenders From Regular Season Lineups" Blog Post
 
 This repository contains the code I used to develop a model for evaluating how likely NHL teams are to contend for the Stanley Cup based on their regular season performance. The project was inspired by the idea that standings alone don't fully capture which teams are truly built for playoff success. To do this, I created a custom Contender Score that looks at team strength from top to bottom, including forwards, defense, and goaltending.
 
